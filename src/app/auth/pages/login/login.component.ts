@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -13,7 +14,8 @@ export class LoginComponent implements OnInit {
     password: [ '123456', [Validators.required, Validators.minLength(6)] ]
   });
 
-  constructor( private fb: FormBuilder ) { }
+  constructor( private fb: FormBuilder,
+               private router: Router ) { }
 
   ngOnInit(): void {
   }
@@ -21,6 +23,7 @@ export class LoginComponent implements OnInit {
   login() {
     console.log("formulario value ", this.miFormulario.value);
     console.log("formulario valido ", this.miFormulario.valid);
+    this.router.navigateByUrl('/dashboard');
   }
 
 }
