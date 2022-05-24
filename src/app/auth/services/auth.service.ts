@@ -36,8 +36,8 @@ export class AuthService {
               }
             }),
             map( res => res.ok ), //Para mutar la respuesta a lo que yo quiera(mando solo la variable que me interesa/n)
-            catchError( err =>  of(false) ) //Otro operador para atrapar el caso del error, pero debe regresar un Observable por eso "of()"
-          );
+            catchError( err =>  of(err.error.msg) ) //Otro operador para atrapar el caso del error, pero debe regresar un Observable por eso "of(false)"
+          );          //En lugar de regresar el false cuando algo sale mal, regreso todo el objeto del error o la propiedad que necesite
   }
 
 }
