@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';   //requiere instalacion en proyecto "npm install sweetalert2"
 
 import { AuthService } from './../../services/auth.service';
 
@@ -30,10 +31,11 @@ export class LoginComponent implements OnInit {
     const { email, password } = this.miFormulario.value;
     this.authService.login( email, password ).subscribe( res => {
       console.log("Respuesta del POST ", res);
-      if( res ) {
+      if( res === true ) {
         this.router.navigateByUrl('/dashboard');
       } else {
         //Error al logear
+        Swal.fire('Error ', res, 'error')
       }
     });
   }
