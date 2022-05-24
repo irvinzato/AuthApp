@@ -2,6 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { AuthService } from './../../services/auth.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -15,7 +17,8 @@ export class LoginComponent implements OnInit {
   });
 
   constructor( private fb: FormBuilder,
-               private router: Router ) { }
+               private router: Router,
+               private authService: AuthService ) { }
 
   ngOnInit(): void {
   }
@@ -23,7 +26,16 @@ export class LoginComponent implements OnInit {
   login() {
     console.log("formulario value ", this.miFormulario.value);
     console.log("formulario valido ", this.miFormulario.valid);
-    this.router.navigateByUrl('/dashboard');
+
+    const { email, password } = this.miFormulario.value;
+    this.authService.login( email, password ).subscribe( res => {
+      console.log("Respuesta del POST ", res);
+      if( res ) {
+        this.router.navigateByUrl('/dashboard');
+      } else {
+        //Error al logear
+      }
+    });
   }
 
 }
