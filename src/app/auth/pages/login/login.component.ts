@@ -30,8 +30,12 @@ export class LoginComponent implements OnInit {
     const { email, password } = this.miFormulario.value;
     this.authService.login( email, password ).subscribe( res => {
       console.log("Respuesta del POST ", res);
+      if( res ) {
+        this.router.navigateByUrl('/dashboard');
+      } else {
+        //Error al logear
+      }
     });
-    //this.router.navigateByUrl('/dashboard');
   }
 
 }
