@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -29,6 +29,7 @@ export class AuthService {
             tap( res => { //tap es solo para que me muestre toda la informacion, el orden de los operadores rxjs es importante
               //console.log(res);
               if( res.ok ){
+                localStorage.setItem( 'token', res.token! );  //Almaceno el token que viene en mi res
                 this._usuario = {
                   name: res.name!,
                   uid: res.uid!
@@ -38,6 +39,14 @@ export class AuthService {
             map( res => res.ok ), //Para mutar la respuesta a lo que yo quiera(mando solo la variable que me interesa/n)
             catchError( err =>  of(err.error.msg) ) //Otro operador para atrapar el caso del error, pero debe regresar un Observable por eso "of(false)"
           );          //En lugar de regresar el false cuando algo sale mal, regreso todo el objeto del error o la propiedad que necesite
+  }
+
+  validarToken() {
+    const url = `${this.baseUrl}/auth/renew`;
+    const headers = new HttpHeaders()
+                        .set('x-token', localStorage.getItem('token') || '' );
+                        //x-token es el acuerdo con mi Back, y donde tengo la variable almacenada, pero tambien puede no haber variable
+    return this.http.get( url, { headers } );
   }
 
 }
