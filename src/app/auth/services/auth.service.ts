@@ -20,6 +20,26 @@ export class AuthService {
 
   constructor( private http: HttpClient ) { }
 
+  registro( name: string, email: string, password: string ) {
+    const url = `${this.baseUrl}/auth/new`;
+    const body = { name, email, password };
+
+    return this.http.post<AuthResponse>( url, body )
+           .pipe(
+             tap( res => {
+               if( res.ok == true){
+                localStorage.setItem( 'token', res.token! );
+                this._usuario = {
+                  name: res.name!,
+                  uid: res.uid!
+                }
+               }
+             }),
+             map( res => res.ok ),
+             catchError( err => of(err.error.msg))
+           );
+  }
+
   login( email: string, password: string ) {
     const url = `${this.baseUrl}/auth`;
     const body = { email, password }
@@ -50,7 +70,7 @@ export class AuthService {
            .pipe(
              map( res => {//Respuesta si todo sale bien
               if( res.ok ){
-                localStorage.setItem( 'token', res.token! );  //Almaceno el token que viene en mi res
+                localStorage.setItem( 'token', res.token! );  //Almaceno el token que viene en mi res de nuevo(OPCIONAL)
                 this._usuario = {
                   name: res.name!,
                   uid: res.uid!

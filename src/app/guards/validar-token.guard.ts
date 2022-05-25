@@ -19,6 +19,7 @@ export class ValidarTokenGuard implements CanActivate, CanLoad {
            .pipe(
             tap( res => {
               if( res == false ){
+                console.log("Expiro el token/se limpio el token de la sesion");
                 this.router.navigateByUrl('/auth');
               }
             })
@@ -31,10 +32,11 @@ export class ValidarTokenGuard implements CanActivate, CanLoad {
     .pipe(
       tap( res => {
         if( res == false ){
+          console.log("Expiro el token/se limpio el token de la sesion");
           this.router.navigateByUrl('/auth');
         }
       })
      );
   }
-  
+
 }
